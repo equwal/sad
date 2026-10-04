@@ -5,10 +5,15 @@ MANPREFIX = $(PREFIX)/man
 
 CFLAGS = -I/usr/local/include
 LDFLAGS = -L /usr/local/lib
-LDLIBS = -lsndfile -lmpg123 -lsndio -lasound -lvorbisfile -lsoxr
+# sound backends: must match SOUNDSYS in config.h
+# OSS (Cygwin, *BSD): OUTOBJ = oss.o, OUTLIBS =
+OUTOBJ = alsa.o sndio.o
+OUTLIBS = -lsndio -lasound
+
+LDLIBS = -lsndfile -lmpg123 -lvorbisfile -lsoxr $(OUTLIBS)
 
 OBJ =\
-	alsa.o\
+	$(OUTOBJ)\
 	cmd.o\
 	decoder.o\
 	fifo.o\
@@ -18,7 +23,6 @@ OBJ =\
 	pcm.o\
 	playlist.o\
 	sad.o\
-	sndio.o\
 	vorbis.o\
 	wav.o
 

@@ -6,35 +6,30 @@
 
 /*
    Only need to edit below this line if you have multiple sound backends.
+   Only the backend selected by SOUNDSYS is linked; see OUTOBJ in Makefile.
 */
 
-#if SOUNDSYS == SNDIO
-#define SNDIOON 1
-#else
-#define SNDIOON 0
-#endif
-#if SOUNDSYS == ALSA
-#define ALSAON 1
-#else
-#define ALSAON 0
-#endif
-#if SOUNDSYS == FIFO
-#define FIFOON 1
-#else
-#define FIFOON 0
-#endif
-
 Outputcfg outputcfgs[] = {
+#if SOUNDSYS == SNDIO
     {.name = "sndio",
      .fmt = {.bits = BITDEPTH, .rate = BITRATE, .channels = CHANNELS},
-     .enabled = SNDIOON,
+     .enabled = 1,
      .output = &sndiooutput},
+#endif
+#if SOUNDSYS == ALSA
     {.name = "alsa",
      .fmt = {.bits = BITDEPTH, .rate = BITRATE, .channels = CHANNELS},
-     .enabled = ALSAON,
+     .enabled = 1,
      .output = &alsaoutput},
+#endif
+#if SOUNDSYS == OSS
+    {.name = "oss",
+     .fmt = {.bits = BITDEPTH, .rate = BITRATE, .channels = CHANNELS},
+     .enabled = 1,
+     .output = &ossoutput},
+#endif
     {.name = "fifo",
      .fmt = {.bits = BITDEPTH, .rate = BITRATE, .channels = CHANNELS},
-     .enabled = FIFOON,
+     .enabled = SOUNDSYS == FIFO,
      .output = &fifooutput},
 };

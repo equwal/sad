@@ -10,6 +10,7 @@
 #define SNDIO 0
 #define ALSA 1
 #define FIFO 2
+#define OSS 3
 typedef struct {
   char *name;
   void (*fn)(int, char *);
@@ -104,6 +105,9 @@ extern Output sndiooutput;
 
 /* alsa.c */
 extern Output alsaoutput;
+
+/* oss.c */
+extern Output ossoutput;
 
 /* fifo.c */
 extern Output fifooutput;
