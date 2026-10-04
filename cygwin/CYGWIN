@@ -1,0 +1,25 @@
+sad on Cygwin
+=============
+
+Cygwin has no sndio or ALSA. It emulates OSS /dev/dsp on top of
+Windows audio, so sad uses the oss backend there.
+
+Packages: gcc-core make socat libsndfile-devel libmpg123-devel
+libvorbis-devel libsoxr-devel
+
+Build and install to /usr/local/bin (sad, sacc):
+
+	make install-cygwin
+
+Optional Windows wrappers: copy cygwin/sad.cmd and cygwin/sacc.cmd to
+a folder on the Windows PATH. They assume Cygwin in C:\cygwin64.
+
+Use (Cygwin shell, PowerShell or cmd):
+
+	sad                    start the daemon (foreground)
+	sacc add FILE          queue a file; Windows paths are converted
+	sacc play
+	sacc status playback
+	sacc kill
+
+SAD_SOCK sets the socket path for both; default /tmp/sad-sock.

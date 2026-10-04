@@ -1,0 +1,12 @@
+#!/bin/sh
+# sacc: send one sad command, e.g. "sacc add FILE", "sacc status playback".
+# Windows paths in "add" are converted with cygpath.
+PATH=/usr/local/bin:/usr/bin:$PATH
+sock=${SAD_SOCK:-/tmp/sad-sock}
+[ $# -eq 0 ] && { echo "usage: sacc command [args]" >&2; exit 1; }
+if [ "$1" = add ] && [ $# -ge 2 ]; then
+	shift
+	for p in "$@"; do printf 'add %s\n' "$(cygpath -ua "$p")"; done
+else
+	printf '%s\n' "$*"
+fi | socat - UNIX-CONNECT:"$sock"

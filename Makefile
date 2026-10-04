@@ -46,6 +46,11 @@ install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -f $(BIN) $(DESTDIR)$(PREFIX)/bin
 
+install-cygwin:
+	sed 's/SOUNDSYS ALSA/SOUNDSYS OSS/' config.def.h > config.h
+	$(MAKE) install OUTOBJ=oss.o OUTLIBS=
+	cp -f cygwin/sacc $(DESTDIR)$(PREFIX)/bin
+
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
 
@@ -58,4 +63,4 @@ clean:
 	cp $< $@
 
 .PHONY:
-	all install uninstall clean
+	all install install-cygwin uninstall clean
