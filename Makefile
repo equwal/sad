@@ -1,7 +1,7 @@
 VERSION = 0.0
 
 PREFIX = /usr/local
-MANPREFIX = $(PREFIX)/man
+MANPREFIX = $(PREFIX)/share/man
 
 CFLAGS = -I/usr/local/include
 LDFLAGS = -L /usr/local/lib
@@ -45,14 +45,18 @@ $(OBJ): arg.h compat.h config.h queue.h sad.h
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -f $(BIN) $(DESTDIR)$(PREFIX)/bin
+	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
+	cp -f sad.1 $(DESTDIR)$(MANPREFIX)/man1
 
 install-cygwin:
 	sed 's/SOUNDSYS ALSA/SOUNDSYS OSS/' config.def.h > config.h
 	$(MAKE) install OUTOBJ=oss.o OUTLIBS=
 	cp -f cygwin/sacc $(DESTDIR)$(PREFIX)/bin
+	cp -f sacc.1 $(DESTDIR)$(MANPREFIX)/man1
 
 uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
+	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN) $(DESTDIR)$(PREFIX)/bin/sacc
+	rm -f $(DESTDIR)$(MANPREFIX)/man1/sad.1 $(DESTDIR)$(MANPREFIX)/man1/sacc.1
 
 clean:
 	rm -f $(BIN) $(OBJ)

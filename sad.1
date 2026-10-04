@@ -1,0 +1,107 @@
+.Dd October 4, 2026
+.Dt SAD 1
+.Os
+.Sh NAME
+.Nm sad
+.Nd simple audio daemon
+.Sh SYNOPSIS
+.Nm
+.Op Fl f Ar sock
+.Sh DESCRIPTION
+.Nm
+plays MP3, Ogg Vorbis and WAV files from a playlist.
+Clients control it with line-based text commands over a
+.Ux
+domain socket.
+Each reply ends with
+.Ql OK
+on success, or
+.Ql ERR
+and a message on failure.
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl f Ar sock
+Listen on
+.Ar sock
+instead of
+.Pa /tmp/sad-sock .
+.El
+.Sh COMMANDS
+.Bl -tag -width Ds
+.It Cm add Ar path
+Add
+.Ar path
+to the playlist.
+.It Cm clear
+Clear the playlist and stop playback.
+.It Cm close
+Close the client connection.
+.It Cm disable Ar output
+Disable the named output.
+.It Cm enable Ar output
+Enable the named output.
+.It Cm kill
+Stop the daemon.
+.It Cm next
+Play the next song.
+.It Cm pause Op Cm 0 | 1
+Pause or resume.
+Toggle when no argument is given.
+.It Cm ping
+Reply with
+.Ql pong .
+.It Cm play Op Ar id
+Play song
+.Ar id ,
+or the current song.
+.It Cm playlist
+Print the playlist as
+.Ql id: path
+lines.
+.It Cm prev
+Play the previous song.
+.It Cm random
+Set random playback mode.
+.It Cm remove Op Ar id
+Remove song
+.Ar id ,
+or the current song, from the playlist.
+.It Cm repeat
+Set repeat mode, the default: cycle through the playlist.
+.It Cm status Op Ar state
+Print
+.Ql state: value
+lines for
+.Cm random , repeat , single , songid , playback
+and
+.Cm volume ,
+or only for
+.Ar state .
+.It Cm stop
+Stop playback.
+.It Cm version
+Print the protocol version.
+.It Cm volume Ar 0-100
+Set the volume of all outputs.
+.It Cm wait Ar event
+Reply with
+.Ql event: name
+when
+.Ar event
+fires.
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa /tmp/sad-sock
+Default socket.
+.El
+.Sh EXAMPLES
+Start the daemon and queue a song:
+.Bd -literal -offset indent
+$ sad &
+$ echo 'add /music/song.mp3' | nc -U /tmp/sad-sock
+$ echo 'play' | nc -U /tmp/sad-sock
+.Ed
+.Sh SEE ALSO
+.Xr nc 1 ,
+.Xr sacc 1

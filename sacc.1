@@ -1,0 +1,47 @@
+.Dd October 4, 2026
+.Dt SACC 1
+.Os
+.Sh NAME
+.Nm sacc
+.Nd send one command to sad
+.Sh SYNOPSIS
+.Nm
+.Ar command
+.Op Ar arg ...
+.Sh DESCRIPTION
+.Nm
+sends
+.Ar command
+and its arguments as one line to the
+.Xr sad 1
+socket with
+.Xr socat 1
+and prints the reply.
+.Pp
+For
+.Cm add ,
+.Nm
+sends one
+.Cm add
+line per path and converts each path, including Windows paths,
+to an absolute Cygwin path with
+.Xr cygpath 1 .
+.Sh ENVIRONMENT
+.Bl -tag -width Ds
+.It Ev SAD_SOCK
+Socket path.
+Default:
+.Pa /tmp/sad-sock .
+.El
+.Sh EXIT STATUS
+.Nm
+exits 1 when no command is given; otherwise it exits with the status of
+.Xr socat 1 .
+.Sh EXAMPLES
+.Bd -literal -offset indent
+$ sacc add 'C:\eUsers\eme\eMusic\esong.mp3'
+$ sacc play
+$ sacc status playback
+.Ed
+.Sh SEE ALSO
+.Xr sad 1
